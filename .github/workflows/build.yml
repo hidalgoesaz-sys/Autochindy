@@ -1,0 +1,33 @@
+name: Construir APK de Autochindy
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout del código
+      uses: actions/checkout@v4
+    
+    - name: Configurar Java 17 (JDK)
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Dar permisos de ejecución a Gradle
+      run: chmod +x gradlew
+
+    - name: Compilar el APK (Ensamblar Debug)
+      run: ./gradlew assembleDebug --stacktrace
+
+    - name: Subir el APK generado
+      uses: actions/upload-artifact@v4
+      with:
+        name: Autochindy-App-Instalable
+        path: app/build/outputs/apk/debug/app-debug.apk
