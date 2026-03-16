@@ -18,15 +18,16 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: gradle
+        
+    - name: Instalar Gradle Nube
+      uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: '8.4'
 
-    - name: Dar permisos de ejecución a Gradle
-      run: chmod +x gradlew
+    - name: Compilar el APK Oficial
+      run: gradle assembleDebug --stacktrace
 
-    - name: Compilar el APK (Ensamblar Debug)
-      run: ./gradlew assembleDebug --stacktrace
-
-    - name: Subir el APK generado
+    - name: Subir el APK generado al final
       uses: actions/upload-artifact@v4
       with:
         name: Autochindy-App-Instalable
