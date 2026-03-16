@@ -24,11 +24,18 @@ jobs:
       with:
         gradle-version: '8.4'
 
-    - name: Compilar el APK Oficial
-      run: gradle assembleDebug --stacktrace
+    - name: Encontrar carpeta y Compilar APK
+      run: |
+        # Buscar la subcarpeta donde metiste el proyecto
+        PROJECT_DIR=$(dirname $(find . -name "settings.gradle.kts" | head -n 1))
+        echo "Entrando a: $PROJECT_DIR"
+        cd "$PROJECT_DIR"
+        
+        # Compilar
+        gradle assembleDebug --stacktrace
 
-    - name: Subir el APK generado al final
+    - name: Subir el APK generado
       uses: actions/upload-artifact@v4
       with:
         name: Autochindy-App-Instalable
-        path: app/build/outputs/apk/debug/app-debug.apk
+        path: "**/app/build/outputs/apk/debug/app-debug.apk"
